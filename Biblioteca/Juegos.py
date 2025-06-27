@@ -19,6 +19,7 @@ class AdivinaAnimal:
         intento = intento.lower().strip()
         if intento == self.respuesta_correcta:
             return '¡Correcto!'
+
         else:
             self.intentos_restantes -= 1
             return 'Incorrecto'
@@ -37,6 +38,7 @@ class AdivinaAnimal:
             Se te dará una pista con la primera letra del animal y la 
             cantidad de letras.'''
         )
+
 
 class AdivinaNumero:
     def __init__(self, intentos=5):
