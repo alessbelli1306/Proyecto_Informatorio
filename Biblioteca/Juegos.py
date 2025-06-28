@@ -73,7 +73,7 @@ class AdivinaNumero:
         )
 
 def obtener_hora():
-    return time.strftime('%H:%M:%S')
+    return "Es la hora : " + time.strftime('%H:%M:%S')
 
 def actualizar_reloj(label_reloj):
     hora_actual = obtener_hora()

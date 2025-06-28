@@ -1,10 +1,21 @@
 
 import tkinter as tk
+from PIL import Image, ImageTk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 import os
 import time
 from Biblioteca.Juegos import AdivinaNumero, AdivinaAnimal
+import pygame
+import threading
+
+def reproducir_musica():
+    pygame.mixer.init()
+    pygame.mixer.music.load("Sonidos/musica_fondo.wav")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
+
+threading.Thread(target=reproducir_musica, daemon=True).start()
 
 COLOR_FONDO = '#2C4059'
 COLOR_BOTON = '#EF7B3E'
@@ -34,7 +45,7 @@ class App:
         tk.Button(root, text='🔢 Adivina el número', command=self.iniciar_numero, bg=COLOR_BOTON, fg='white', font=FUENTE_NORMAL, width=30).pack(pady=10)
         tk.Button(root, text='🐾 Adivina el animal', command=self.iniciar_animal, bg=COLOR_BOTON, fg='white', font=FUENTE_NORMAL, width=30).pack(pady=10)
         tk.Button(root, text='❌ Salir', command=root.quit, bg=COLOR_ERROR, fg='white', font=FUENTE_NORMAL, width=30).pack(pady=10)
-
+        
         self.reloj = tk.Label(root, text=self.obtener_hora(), bg=COLOR_FONDO, fg=COLOR_TEXTO, font=FUENTE_NORMAL)
         self.reloj.pack(side='bottom', pady=5)
         self.actualizar_reloj()
@@ -81,7 +92,7 @@ class App:
             f.write(linea + "\n")
 
     def obtener_hora(self):
-        return time.strftime('%H:%M:%S')
+        return "Es la hora: " + time.strftime('%H:%M:%S')
 
     def actualizar_reloj(self):
         self.reloj.config(text=self.obtener_hora())
@@ -114,7 +125,6 @@ class App:
             pista = tk.Label(win, text=self.juego.mostrar_pistas(), bg=COLOR_FONDO, fg=COLOR_TEXTO, font=FUENTE_NORMAL)
             pista.pack(pady=5)
 
-# Agregado
         def mostrar_imagen_animal(nombre_animal):
             ruta = f'Imagenes/{nombre_animal}.png'
             if os.path.exists(ruta):            # Para Verificar si la imagen
@@ -144,14 +154,14 @@ class App:
                 respuesta = 'Debes ingresar un número'
 
             label_intentos.config(text=f'Intentos restantes: {self.juego.intentos_restantes}')
-# Agregue las funciones de mostrar_imagen_animal (en caso de gane o pierda)
+
             if respuesta == '¡Correcto!' or respuesta == '¡Genial!':
                 win.configure(bg=COLOR_ACIERTO)
                 resultado.config(text=respuesta, bg=COLOR_ACIERTO, fg='white', font=FUENTE_ACIERTO)
                 self.guardar_puntaje(tipo, len(intentos_previos))
                 if tipo == 'animal':
                     mostrar_imagen_animal(self.juego.respuesta_correcta)
-                    win.after(1500, lambda: [win.destroy(), messagebox.showinfo('Ganaste', f'¡Adivinaste el {tipo}!')])
+                    win.after(3500, lambda: [win.destroy(), messagebox.showinfo('Ganaste', f'¡Adivinaste el {tipo}!')])
                 else:
                     messagebox.showinfo('Ganaste', f'¡Adivinaste el {tipo}!')
                     win.destroy()
@@ -165,12 +175,11 @@ class App:
                     resultado.config(bg=COLOR_INCORRECTO, fg='white', font=FUENTE_ACIERTO)
                     if tipo == 'animal':
                         mostrar_imagen_animal(self.juego.respuesta_correcta)
-                        win.after(1500, lambda: [win.destroy(), messagebox.showinfo('Perdiste', f'El {tipo} era: {self.juego.respuesta_correcta}')])
+                        win.after(3500, lambda: [win.destroy(), messagebox.showinfo('Perdiste', f'El {tipo} era: {self.juego.respuesta_correcta}')])
                     else:
                         mensaje = f'El {tipo} era: {getattr(self.juego, "respuesta_correcta", self.juego.numero)}'
                         messagebox.showinfo('Perdiste', mensaje)
                         win.destroy()
-# Hasta aquí
 
         label_intentos.pack(pady=5)
         entrada.pack(pady=10)
@@ -180,5 +189,47 @@ class App:
 
 if __name__ == '__main__':
     root = tk.Tk()
-    app = App(root)
-    root.mainloop()
+
+from pathlib import Path
+ruta_imagen = Path(__file__).parent / 'Imagenes/portada_juegos.jpg'
+imagen_fondo = Image.open(ruta_imagen)
+fondo = ImageTk.PhotoImage(imagen_fondo)
+fondo_label = tk.Label(root, image=fondo)
+fondo_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+def reproducir_musica():
+    pygame.mixer.init()
+    pygame.mixer.music.load("Sonidos/musica_fondo.wav")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
+
+musica_pausada = False
+
+def pausar_musica():
+    global musica_pausada
+    if not musica_pausada:
+        pygame.mixer.music.pause()
+        musica_pausada = True
+
+def reanudar_musica():
+    global musica_pausada
+    if musica_pausada:
+        pygame.mixer.music.unpause()
+        musica_pausada = False
+
+threading.Thread(target=reproducir_musica, daemon=True).start()
+frame_musica= tk.Frame(root, bg="green")
+frame_musica.pack(pady=10)
+btn_pausa = tk.Button(frame_musica, text="🔇 Pausar Música", command=pausar_musica) 
+btn_reanudar = tk.Button(frame_musica, text="🔊 Reanudar Música", command=reanudar_musica)
+btn_pausa.pack(side="left", pady=5, padx=5)
+btn_reanudar.pack(side="left", pady=5, padx=5)
+
+mensaje = tk.Label(root, text="Bienvenido a los Juegos Educativos", fg='white', bg="green", font=("Comic Sans MS", 22,"bold"))
+mensaje.pack(pady=5)
+
+mensaje = tk.Label(root, text="Informatorio Chaco 2025 es la hora de jugar ", fg='white', bg="green", font=("Comic Sans MS", 22,"bold"))
+mensaje.pack(pady=5)
+
+app = App(root)
+root.mainloop()
