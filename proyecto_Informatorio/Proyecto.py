@@ -10,11 +10,26 @@ import threading
 
 def reproducir_musica():
     pygame.mixer.init()
-    pygame.mixer.music.load("Sonidos/musica_fondo.wav")
+    pygame.mixer.music.load("proyecto_informatorio/Sonidos/musica_fondo.wav")
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
 
 threading.Thread(target=reproducir_musica, daemon=True).start()
+
+musica_pausada = False
+
+def pausar_musica():
+    global musica_pausada
+    if not musica_pausada:
+        pygame.mixer.music.pause()
+        musica_pausada = True
+
+def reanudar_musica():
+    global musica_pausada
+    if musica_pausada:
+        pygame.mixer.music.unpause()
+        musica_pausada = False
+
 
 # Colores.
 COLOR_FONDO_JUEGO = "#83CECE"
@@ -42,7 +57,7 @@ class App:
         self.root.withdraw()
         self.solicitar_alias()
 
-        imagen_fondo = Image.open('Imagenes/fondo.png')
+        imagen_fondo = Image.open('proyecto_informatorio/Imagenes/fondo.png')
         self.fondo_tk = ImageTk.PhotoImage(imagen_fondo)
 
         fondo_label = tk.Label(root, image=self.fondo_tk)
@@ -230,4 +245,13 @@ class App:
 if __name__ == '__main__':
     root = tk.Tk()
 app = App(root)
+frame_musica = tk.Frame(root)
+frame_musica.pack(pady=10)
+
+btn_pausa = tk.Button(frame_musica, text="🔇 Pausar Música", command=pausar_musica)
+btn_reanudar = tk.Button(frame_musica, text="🔊 Reanudar Música", command=reanudar_musica)
+
+btn_pausa.pack(side="left", padx=5)
+btn_reanudar.pack(side="left", padx=5)
+
 root.mainloop()
