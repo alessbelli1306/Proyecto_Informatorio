@@ -19,26 +19,24 @@ class AdivinaAnimal:
         intento = intento.lower().strip()
         if intento == self.respuesta_correcta:
             return '¡Correcto!'
-
         else:
             self.intentos_restantes -= 1
             return 'Incorrecto'
 
     def mostrar_pistas(self):
-        return (
-            f'Pista: empieza con "{self.respuesta_correcta[0]}" '
-            f'y tiene {len(self.respuesta_correcta)} letras.'
-        )
+        cantidad_revelada = self.intentos_max - self.intentos_restantes
+        revelada = self.respuesta_correcta[:cantidad_revelada]
+        oculto = '_' * (len(self.respuesta_correcta) - cantidad_revelada)
+        pista = f'Pista: {revelada + oculto} ({len(self.respuesta_correcta)} letras)'
+        return pista
 
     def mostrar_instrucciones(self):
         return (
-            '''            ADIVINA EL ANIMAL
-            Tenes que adivinar el nombre de un animal secreto.
-            Dispones de 5 intentos. Cada vez que fallas, pierdes un intento.
-            Se te dará una pista con la primera letra del animal y la 
-            cantidad de letras.'''
+            '''ADIVINA EL ANIMAL\n
+Debes adivinar el nombre de un animal secreto.
+Tenes 5 intentos. Cada vez que falles, perdes un intento.
+Se te dara una pista que revela más letras a medida que fallas.'''
         )
-
 
 class AdivinaNumero:
     def __init__(self, intentos=5):
@@ -54,7 +52,7 @@ class AdivinaNumero:
         try:
             intento = int(intento)
         except ValueError:
-            return 'Entrada no válida'
+            return 'Entrada no valida'
         if intento < self.numero:
             self.intentos_restantes -= 1
             return 'Demasiado bajo'
@@ -66,14 +64,14 @@ class AdivinaNumero:
 
     def mostrar_instrucciones(self):
         return (
-            '''             ADIVINA EL NÚMERO
-            Debes adivinar un número secreto entre 1 y 10.
-            Cada vez que falles, se te dirá si fue muy alto o muy bajo.
-            ¡Tienes un número limitado de intentos!'''
+            '''ADIVINA EL NÚMERO\n
+Debes adivinar un número secreto entre 1 y 10.
+Cada vez que fallas, se te dirá si fue muy alto o muy bajo.
+¡Tenes un número limitado de intentos!'''
         )
 
 def obtener_hora():
-    return "Es la hora : " + time.strftime('%H:%M:%S')
+    return time.strftime('%H:%M:%S')
 
 def actualizar_reloj(label_reloj):
     hora_actual = obtener_hora()

@@ -1,27 +1,5 @@
 luna - número - 60 puntos
-luna - animal - 90 puntos
-Yair - animal - 90 puntos
+Mat - animal - 80 puntos
+Jugador Anónimo - número - 60 puntos
+Jugador Anónimo - animal - 90 puntos
 Yair - animal - 80 puntos
-Hola - animal - 90 puntos
-Perro - animal - 90 puntos
-Yair - animal - 90 puntos
-Yair - animal - 90 puntos
-Yair - animal - 90 puntos
-Yair - animal - 90 puntos
-Ale - animal - 90 puntos
-Adolf - animal - 90 puntos
-Yair - animal - 90 puntos
-Ales - animal - 90 puntos
-Ales - animal - 90 puntos
-Ales - animal - 90 puntos
-Ale - animal - 90 puntos
-Loquillo - animal - 90 puntos
-Alan - animal - 90 puntos
-Yair - animal - 90 puntos
-Yair - animal - 90 puntos
-Yair - animal - 90 puntos
-Vegeta - animal - 80 puntos
-Vegeta - animal - 90 puntos
-Gohan - animal - 90 puntos
-fissu - animal - 70 puntos
-fissu - número - 50 puntos
